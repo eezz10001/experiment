@@ -1,0 +1,16 @@
+domain: touchturing.com
+layout:
+- go.kubebuilder.io/v3
+projectName: experiment
+repo: experiment
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: touchturing.com
+  group: turing
+  kind: Experiment
+  path: experiment/api/v1
+  version: v1
+version: "3"

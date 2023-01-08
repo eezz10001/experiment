@@ -1,0 +1,12 @@
+apiVersion: turing.touchturing.com/v1
+kind: Experiment
+metadata:
+  labels:
+    app.kubernetes.io/name: experiment
+    app.kubernetes.io/instance: experiment-sample
+    app.kubernetes.io/part-of: experiment
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: experiment
+  name: experiment-sample
+spec:
+  # TODO(user): Add fields here
