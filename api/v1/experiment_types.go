@@ -31,10 +31,10 @@ type ExperimentSpec struct {
 
 	// Foo is an example field of Experiment. Edit experiment_types.go to remove/update
 	//Foo string `json:"foo,omitempty"`
-	Replicas  int32                   `json:"replicas,omitempty" protobuf:"varint,1,opt,name=replicas"`
+	v1.Pod
 	Image     string                  `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
 	Host      string                  `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
-	Port      int32                   `json:"port,omitempty" protobuf:"varint,1,opt,name=port"`
+	Ports     []v1.ServicePort        `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
 	Resources v1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
 }
 
