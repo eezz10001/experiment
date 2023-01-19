@@ -43,6 +43,7 @@ func NewIngressBuilder(client client.Client, experiment *experimentv1.Experiment
 		}
 
 		err = tpl.Execute(&tplRet, ingress)
+
 		if err != nil {
 			return nil, err
 		}
@@ -81,6 +82,7 @@ func (this *ingressBuilder) Build(ctx context.Context) (status bool, err error) 
 		}
 	} else { //is patch
 		patch := client.MergeFrom(this.ingress.DeepCopy())
+
 		this.apply()
 		err = this.Patch(ctx, this.ingress, patch)
 		if err != nil {

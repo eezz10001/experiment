@@ -28,7 +28,7 @@ func GetContainer(image string) []coreV1.Container {
 	container := coreV1.Container{}
 	//impala container
 	container.Name = "experiment"
-	container.ImagePullPolicy = coreV1.PullAlways
+	container.ImagePullPolicy = coreV1.PullIfNotPresent
 	container.Image = image
 	return []coreV1.Container{container}
 }

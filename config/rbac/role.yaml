@@ -1,0 +1,33 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - experiment.touchturing.com
+  resources:
+  - experiments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - experiment.touchturing.com
+  resources:
+  - experiments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - experiment.touchturing.com
+  resources:
+  - experiments/status
+  verbs:
+  - get
+  - patch
+  - update

@@ -17,6 +17,7 @@ limitations under the License.
 package v1
 
 import (
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -30,9 +31,11 @@ type ExperimentSpec struct {
 
 	// Foo is an example field of Experiment. Edit experiment_types.go to remove/update
 	//Foo string `json:"foo,omitempty"`
-	Replicas int32  `json:"replicas,omitempty" protobuf:"varint,1,opt,name=replicas"`
-	Image    string `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
-	Host     string `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
+	Replicas  int32                   `json:"replicas,omitempty" protobuf:"varint,1,opt,name=replicas"`
+	Image     string                  `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
+	Host      string                  `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
+	Port      int32                   `json:"port,omitempty" protobuf:"varint,1,opt,name=port"`
+	Resources v1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
 }
 
 // ExperimentStatus defines the observed state of Experiment
