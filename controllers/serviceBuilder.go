@@ -58,9 +58,13 @@ func NewServiceBuilder(client client.Client, experiment *experimentv1.Experiment
 // 同步属性
 func (this *serviceBuilder) apply() *serviceBuilder {
 
+	this.service.ObjectMeta.Name = this.experiment.Name
+	this.service.ObjectMeta.Namespace = this.experiment.Namespace
+
 	this.service.Spec.Selector = GetLabel(this.experiment, nil)
 	this.service.Labels = GetLabel(this.experiment, this.service.Labels)
 
+	this.service.Spec.Ports = GetServicePorts(this.experiment)
 	return this
 }
 

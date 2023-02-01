@@ -33,7 +33,7 @@ type ExperimentSpec struct {
 	//Foo string `json:"foo,omitempty"`
 	Image     string                  `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
 	Host      string                  `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
-	Ports     []v1.ServicePort        `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
+	Ports     []v1.ContainerPort      `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
 	Resources v1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
 }
 

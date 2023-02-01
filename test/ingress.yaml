@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: portName1-experimentName.sample.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: jupyter
+              servicePort: 8081
+    - host: portName2-experimentName.sample.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: jupyter
+              servicePort: 8082

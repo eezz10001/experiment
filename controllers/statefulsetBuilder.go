@@ -58,6 +58,10 @@ func NewStatefulSetBuilder(client client.Client, experiment *experimentv1.Experi
 
 // Synchronization attributes
 func (this *statefulSetBuilder) apply() *statefulSetBuilder {
+
+	this.statefulSet.ObjectMeta.Name = this.experiment.Name
+	this.statefulSet.ObjectMeta.Namespace = this.experiment.Namespace
+
 	selectorLabel := GetLabel(this.experiment, nil)
 	this.experiment.ObjectMeta.Labels = GetLabel(this.experiment, this.experiment.ObjectMeta.Labels)
 
@@ -65,10 +69,9 @@ func (this *statefulSetBuilder) apply() *statefulSetBuilder {
 	this.statefulSet.Spec.Selector = &metaV1.LabelSelector{MatchLabels: selectorLabel}
 	this.statefulSet.Spec.Template.ObjectMeta.Labels = selectorLabel
 	this.statefulSet.Spec.ServiceName = this.statefulSet.Name
-	this.statefulSet.Spec.Replicas = &this.experiment.Spec.Replicas
 
 	//Containers
-	this.statefulSet.Spec.Template.Spec.Containers = GetContainer(this.experiment.Spec.Image)
+	this.statefulSet.Spec.Template.Spec.Containers = GetContainer(this.experiment)
 	return this
 }
 
