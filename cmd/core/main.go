@@ -32,7 +32,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	experimentv1 "experiment/api/v1"
-	"experiment/controllers"
+
+	"github.com/eezz10001/experiment/controllers"
 	//+kubebuilder:scaffold:imports
 )
 

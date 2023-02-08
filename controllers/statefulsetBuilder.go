@@ -34,6 +34,7 @@ func NewStatefulSetBuilder(client client.Client, experiment *experimentv1.Experi
 	err := client.Get(context.Background(), types.NamespacedName{
 		Namespace: experiment.Namespace, Name: experiment.Name,
 	}, statefulSet)
+
 	if err != nil { //have no find
 		statefulSet.Name, statefulSet.Namespace = experiment.Name, experiment.Namespace
 		tpl, err := template.New("statefulSet").Parse(ststpl)
