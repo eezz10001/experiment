@@ -56,7 +56,7 @@ type ExperimentReconciler struct {
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.13.1/pkg/reconcile
-func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ret ctrl.Result, err error) {
 	_ = log.FromContext(ctx)
 
 	experiment := &experimentv1.Experiment{}
@@ -74,14 +74,19 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{}, nil
 	}
 
-	if _, _, err := r.CreateComponent(experiment); err != nil {
+	if experiment.Status.SubResourcesStatus.Sts, experiment.Status.SubResourcesStatus.Svc,
+		experiment.Status.SubResourcesStatus.Ingress, err = r.CreateComponent(experiment); err != nil {
 		return ctrl.Result{}, err
 	}
 
+	if err := r.JudgmentStatus(experiment, ctx); err != nil {
+		log2.Println("==============Judgment status fail")
+		return ctrl.Result{}, err
+	}
 	return ctrl.Result{}, nil
 }
 
-func (r *ExperimentReconciler) CreateComponent(experiment *experimentv1.Experiment) (stsStatus, svcStatus bool, err error) {
+func (r *ExperimentReconciler) CreateComponent(experiment *experimentv1.Experiment) (stsStatus, svcStatus, ingressStatus bool, err error) {
 	//create statefulSet
 	stsStatus, err = r.CreateStatefulset(experiment)
 	if err != nil {
@@ -95,7 +100,7 @@ func (r *ExperimentReconciler) CreateComponent(experiment *experimentv1.Experime
 	}
 
 	//create  ingress
-	svcStatus, err = r.CreateIngress(experiment)
+	ingressStatus, err = r.CreateIngress(experiment)
 	if err != nil {
 		return
 	}
@@ -126,8 +131,24 @@ func (r *ExperimentReconciler) CreateIngress(experiment *experimentv1.Experiment
 	if err != nil {
 		return false, err
 	}
-	status, err := ingressBuilder.Build(context.Background())
-	return status, err
+	return ingressBuilder.Build(context.Background())
+}
+
+func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experiment, ctx context.Context) error {
+	if experiment.Status.SubResourcesStatus.Sts == true &&
+		experiment.Status.SubResourcesStatus.Svc == true &&
+		experiment.Status.SubResourcesStatus.Ingress == true {
+		if experiment.Status.Phase != experimentv1.ImpalaPhaseRunning {
+			experiment.Status.Phase = experimentv1.ImpalaPhaseRunning
+			return r.Client.Status().Update(ctx, experiment)
+		}
+	} else {
+		if experiment.Status.Phase == experimentv1.ImpalaPhaseRunning {
+			experiment.Status.Phase = experimentv1.ImpalaPhaseFail
+			return r.Client.Status().Update(ctx, experiment)
+		}
+	}
+	return nil
 }
 
 // Prevent manual misoperation

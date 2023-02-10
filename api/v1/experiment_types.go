@@ -17,8 +17,16 @@ limitations under the License.
 package v1
 
 import (
-	v1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	coreV1 "k8s.io/api/core/v1"
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
+type ExperimentPhase string
+
+const (
+	ImpalaPhasePending ExperimentPhase = "Pending"
+	ImpalaPhaseRunning ExperimentPhase = "Running"
+	ImpalaPhaseFail    ExperimentPhase = "Fail"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
@@ -31,17 +39,28 @@ type ExperimentSpec struct {
 
 	// Foo is an example field of Experiment. Edit experiment_types.go to remove/update
 	//Foo string `json:"foo,omitempty"`
-	Image     string                  `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
-	Host      string                  `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
-	Ports     []v1.ContainerPort      `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
-	Resources v1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
-	Affinity  *v1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
+	Image          string                      `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
+	Host           string                      `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
+	Ports          []coreV1.ContainerPort      `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
+	Resources      coreV1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
+	Affinity       *coreV1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
+	LivenessProbe  *coreV1.Probe               `json:"livenessProbe,omitempty" protobuf:"bytes,10,opt,name=livenessProbe"`
+	ReadinessProbe *coreV1.Probe               `json:"readinessProbe,omitempty" protobuf:"bytes,11,opt,name=readinessProbe"`
 }
 
 // ExperimentStatus defines the observed state of Experiment
 type ExperimentStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+	SubResourcesStatus SubResourcesStatus `json:"subResourcesStatus,omitempty"`
+	Phase              ExperimentPhase    `json:"phase,omitempty"`
+	Message            string             `json:"message,omitempty"`
+}
+
+type SubResourcesStatus struct {
+	Sts     bool `json:"statestore,omitempty"`
+	Svc     bool `json:"statestoreService,omitempty"`
+	Ingress bool `json:"statestoreLbService,omitempty"`
 }
 
 //+kubebuilder:object:root=true
@@ -49,8 +68,8 @@ type ExperimentStatus struct {
 
 // Experiment is the Schema for the experiments API
 type Experiment struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	metaV1.TypeMeta   `json:",inline"`
+	metaV1.ObjectMeta `json:"metadata,omitempty"`
 
 	Spec   ExperimentSpec   `json:"spec,omitempty"`
 	Status ExperimentStatus `json:"status,omitempty"`
@@ -60,8 +79,8 @@ type Experiment struct {
 
 // ExperimentList contains a list of Experiment
 type ExperimentList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
+	metaV1.TypeMeta `json:",inline"`
+	metaV1.ListMeta `json:"metadata,omitempty"`
 	Items           []Experiment `json:"items"`
 }
 
