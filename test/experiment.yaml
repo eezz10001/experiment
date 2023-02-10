@@ -1,0 +1,11 @@
+apiVersion: turing.touchturing.com/v1
+kind: Experiment
+metadata:
+  name: myapp
+  namespace: test
+spec:
+  image: test:v1
+  host: test.com
+  ports:
+    - containerPort: 80
+      name: myweb

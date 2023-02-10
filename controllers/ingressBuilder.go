@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	experimentv1 "experiment/api/v1"
-	"k8s.io/api/extensions/v1beta1"
+	"k8s.io/api/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/yaml"
@@ -14,7 +14,7 @@ import (
 )
 
 const ingresstpl = `
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ .Name }}

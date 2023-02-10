@@ -35,6 +35,7 @@ type ExperimentSpec struct {
 	Host      string                  `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
 	Ports     []v1.ContainerPort      `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
 	Resources v1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
+	Affinity  *v1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
 }
 
 // ExperimentStatus defines the observed state of Experiment

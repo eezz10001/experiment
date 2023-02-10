@@ -69,6 +69,7 @@ func (this *statefulSetBuilder) apply() *statefulSetBuilder {
 	this.statefulSet.Spec.Selector = &metaV1.LabelSelector{MatchLabels: selectorLabel}
 	this.statefulSet.Spec.Template.ObjectMeta.Labels = selectorLabel
 	this.statefulSet.Spec.ServiceName = this.statefulSet.Name
+	this.statefulSet.Spec.Template.Spec.Affinity = this.experiment.Spec.Affinity
 
 	//Containers
 	this.statefulSet.Spec.Template.Spec.Containers = GetContainer(this.experiment)

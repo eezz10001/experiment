@@ -4,7 +4,7 @@ import (
 	experimentv1 "experiment/api/v1"
 	"fmt"
 	coreV1 "k8s.io/api/core/v1"
-	"k8s.io/api/extensions/v1beta1"
+	"k8s.io/api/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
@@ -54,6 +54,7 @@ func GetServicePorts(experiment *experimentv1.Experiment) []coreV1.ServicePort {
 }
 
 func GetIngressRule(experiment *experimentv1.Experiment) []v1beta1.IngressRule {
+	PathType := v1beta1.PathTypePrefix
 	ret := make([]v1beta1.IngressRule, 0)
 
 	for _, port := range experiment.Spec.Ports {
@@ -62,7 +63,8 @@ func GetIngressRule(experiment *experimentv1.Experiment) []v1beta1.IngressRule {
 			IngressRuleValue: v1beta1.IngressRuleValue{
 				HTTP: &v1beta1.HTTPIngressRuleValue{
 					Paths: []v1beta1.HTTPIngressPath{{
-						Path: "/",
+						PathType: &PathType,
+						Path:     "/",
 						Backend: v1beta1.IngressBackend{
 							ServiceName: experiment.Name,
 							ServicePort: intstr.IntOrString{

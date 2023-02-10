@@ -1,0 +1,25 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: myapp
+  namespace: test
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    experiment.touchturing.com/instance: myapp
+    experiment.touchturing.com/ns: test
+    experiment.touchturing.com/v1: experiment
+spec:
+  ingressClassName: nginx-example
+  rules:
+    - host: myweb-myapp.test.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port:
+                  number: 80
+

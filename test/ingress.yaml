@@ -1,22 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: my-ingress
+  name: minimal-ingress
+  namespace: test
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx-example
   rules:
-    - host: portName1-experimentName.sample.com
-      http:
+    - http:
         paths:
-          - path: /
-            backend:
-              serviceName: jupyter
-              servicePort: 8081
-    - host: portName2-experimentName.sample.com
-      http:
-        paths:
-          - path: /
+          - path: /testpath
+            pathType: Prefix
             backend:
               serviceName: jupyter
               servicePort: 8082

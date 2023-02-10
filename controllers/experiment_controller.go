@@ -21,6 +21,7 @@ import (
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/workqueue"
@@ -61,6 +62,9 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	experiment := &experimentv1.Experiment{}
 
 	if err := r.Get(ctx, req.NamespacedName, experiment); err != nil {
+		if errors.IsNotFound(err) {
+			return ctrl.Result{}, nil
+		}
 		return ctrl.Result{}, err
 	}
 
