@@ -1,4 +1,4 @@
-module experiment
+module github.com/eezz10001/experiment
 
 go 1.19
 

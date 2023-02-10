@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"context"
-	experimentv1 "experiment/api/v1"
+	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -34,6 +34,7 @@ func NewStatefulSetBuilder(client client.Client, experiment *experimentv1.Experi
 	err := client.Get(context.Background(), types.NamespacedName{
 		Namespace: experiment.Namespace, Name: experiment.Name,
 	}, statefulSet)
+
 	if err != nil { //have no find
 		statefulSet.Name, statefulSet.Namespace = experiment.Name, experiment.Namespace
 		tpl, err := template.New("statefulSet").Parse(ststpl)

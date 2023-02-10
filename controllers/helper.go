@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	experimentv1 "experiment/api/v1"
 	"fmt"
+	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	coreV1 "k8s.io/api/core/v1"
 	"k8s.io/api/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/util/intstr"

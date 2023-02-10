@@ -34,7 +34,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	experimentv1 "experiment/api/v1"
+	experimentv1 "github.com/eezz10001/experiment/api/v1"
 )
 
 // ExperimentReconciler reconciles a Experiment object

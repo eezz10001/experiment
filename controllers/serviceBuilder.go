@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"context"
-	experimentv1 "experiment/api/v1"
+	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	coreV1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
