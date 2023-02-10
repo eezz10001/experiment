@@ -33,9 +33,7 @@ func GetContainer(experiment *experimentv1.Experiment) []coreV1.Container {
 	container.Name = "experiment"
 	container.ImagePullPolicy = coreV1.PullIfNotPresent
 	container.Image = experiment.Spec.Image
-
 	container.Ports = experiment.Spec.Ports
-
 	container.Resources = experiment.Spec.Resources
 	return []coreV1.Container{container}
 }
