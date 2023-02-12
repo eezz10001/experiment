@@ -33,48 +33,79 @@ func GetContainer(experiment *experimentv1.Experiment) []coreV1.Container {
 	container.Name = "experiment"
 	container.ImagePullPolicy = coreV1.PullIfNotPresent
 	container.Image = experiment.Spec.Image
-	container.Ports = experiment.Spec.Ports
+	container.Ports = []coreV1.ContainerPort{experiment.Spec.Port}
 	container.Resources = experiment.Spec.Resources
+
+	container.ReadinessProbe = GetReadinessProbe(experiment)
+	container.LivenessProbe = GetLivenessProbe(experiment)
 	return []coreV1.Container{container}
 }
 
-func GetServicePorts(experiment *experimentv1.Experiment) []coreV1.ServicePort {
-	ret := make([]coreV1.ServicePort, 0)
-
-	for _, port := range experiment.Spec.Ports {
-		ret = append(ret, coreV1.ServicePort{
-			Name:     port.Name,
-			Protocol: port.Protocol,
-			Port:     port.ContainerPort,
-		})
+func GetServicePorts(experiment *experimentv1.Experiment) coreV1.ServicePort {
+	return coreV1.ServicePort{
+		Name:     experiment.Spec.Port.Name,
+		Protocol: experiment.Spec.Port.Protocol,
+		Port:     experiment.Spec.Port.ContainerPort,
 	}
-	return ret
+}
+
+func GetReadinessProbe(experiment *experimentv1.Experiment) *coreV1.Probe {
+	return &coreV1.Probe{
+		ProbeHandler: coreV1.ProbeHandler{
+			TCPSocket: &coreV1.TCPSocketAction{
+				Port: intstr.IntOrString{
+					Type:   intstr.Int,
+					IntVal: experiment.Spec.Probe.Port,
+				},
+			},
+		},
+		InitialDelaySeconds: 10,
+		TimeoutSeconds:      1,
+		PeriodSeconds:       10,
+		SuccessThreshold:    1,
+		FailureThreshold:    3,
+	}
+}
+
+func GetLivenessProbe(experiment *experimentv1.Experiment) *coreV1.Probe {
+	return &coreV1.Probe{
+		ProbeHandler: coreV1.ProbeHandler{
+			TCPSocket: &coreV1.TCPSocketAction{
+				Port: intstr.IntOrString{
+					Type:   intstr.Int,
+					IntVal: experiment.Spec.Probe.Port,
+				},
+			},
+		},
+		InitialDelaySeconds: 15,
+		TimeoutSeconds:      3,
+		PeriodSeconds:       30,
+		FailureThreshold:    2,
+	}
 }
 
 func GetIngressRule(experiment *experimentv1.Experiment) []v1beta1.IngressRule {
 	PathType := v1beta1.PathTypePrefix
 	ret := make([]v1beta1.IngressRule, 0)
 
-	for _, port := range experiment.Spec.Ports {
-		ret = append(ret, v1beta1.IngressRule{
-			Host: fmt.Sprintf("%s-%s.%s", port.Name, experiment.Name, experiment.Spec.Host),
-			IngressRuleValue: v1beta1.IngressRuleValue{
-				HTTP: &v1beta1.HTTPIngressRuleValue{
-					Paths: []v1beta1.HTTPIngressPath{{
-						PathType: &PathType,
-						Path:     "/",
-						Backend: v1beta1.IngressBackend{
-							ServiceName: experiment.Name,
-							ServicePort: intstr.IntOrString{
-								Type:   intstr.Int,
-								IntVal: port.ContainerPort,
-							},
+	ret = append(ret, v1beta1.IngressRule{
+		Host: fmt.Sprintf("%s-%s.%s", experiment.Spec.Port.Name, experiment.Name, experiment.Spec.Host),
+		IngressRuleValue: v1beta1.IngressRuleValue{
+			HTTP: &v1beta1.HTTPIngressRuleValue{
+				Paths: []v1beta1.HTTPIngressPath{{
+					PathType: &PathType,
+					Path:     "/",
+					Backend: v1beta1.IngressBackend{
+						ServiceName: experiment.Name,
+						ServicePort: intstr.IntOrString{
+							Type:   intstr.Int,
+							IntVal: experiment.Spec.Port.ContainerPort,
 						},
-					}},
-				},
+					},
+				}},
 			},
-		})
-	}
+		},
+	})
 	return ret
 }
 

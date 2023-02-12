@@ -39,13 +39,16 @@ type ExperimentSpec struct {
 
 	// Foo is an example field of Experiment. Edit experiment_types.go to remove/update
 	//Foo string `json:"foo,omitempty"`
-	Image          string                      `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
-	Host           string                      `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
-	Ports          []coreV1.ContainerPort      `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
-	Resources      coreV1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
-	Affinity       *coreV1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
-	LivenessProbe  *coreV1.Probe               `json:"livenessProbe,omitempty" protobuf:"bytes,10,opt,name=livenessProbe"`
-	ReadinessProbe *coreV1.Probe               `json:"readinessProbe,omitempty" protobuf:"bytes,11,opt,name=readinessProbe"`
+	Image     string                      `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
+	Host      string                      `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
+	Port      coreV1.ContainerPort        `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
+	Resources coreV1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
+	Affinity  *coreV1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
+	Probe     Probe                       `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
+}
+type Probe struct {
+	Path string `json:"path,omitempty" protobuf:"bytes,11,rep,name=path"`
+	Port int32  `json:"port,omitempty" protobuf:"varint,2,opt,name=port"`
 }
 
 // ExperimentStatus defines the observed state of Experiment

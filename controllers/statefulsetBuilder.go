@@ -74,6 +74,7 @@ func (this *statefulSetBuilder) apply() *statefulSetBuilder {
 
 	//Containers
 	this.statefulSet.Spec.Template.Spec.Containers = GetContainer(this.experiment)
+
 	return this
 }
 

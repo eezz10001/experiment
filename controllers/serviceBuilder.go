@@ -64,7 +64,7 @@ func (this *serviceBuilder) apply() *serviceBuilder {
 	this.service.Spec.Selector = GetLabel(this.experiment, nil)
 	this.service.Labels = GetLabel(this.experiment, this.service.Labels)
 
-	this.service.Spec.Ports = GetServicePorts(this.experiment)
+	this.service.Spec.Ports = []coreV1.ServicePort{GetServicePorts(this.experiment)}
 	return this
 }
 
