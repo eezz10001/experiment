@@ -6,7 +6,11 @@ metadata:
 spec:
   image: nginx
   host: test.com
-  ports:
-    - containerPort: 80
-      name: myweb
+  port:
+    name: web
+    hostPort: 80
+    containerPort: 80
+  probe:
+    path: /
+    port: 80
 

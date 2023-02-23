@@ -869,7 +869,7 @@ spec:
                 description: Foo is an example field of Experiment. Edit experiment_types.go
                   to remove/update Foo string `json:"foo,omitempty"`
                 type: string
-              ports:
+              port:
                 description: ContainerPort represents a network port in a single container.
                 properties:
                   containerPort:

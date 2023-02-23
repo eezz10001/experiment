@@ -41,13 +41,13 @@ type ExperimentSpec struct {
 	//Foo string `json:"foo,omitempty"`
 	Image     string                      `json:"image,omitempty" protobuf:"bytes,11,rep,name=image"`
 	Host      string                      `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
-	Port      coreV1.ContainerPort        `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
+	Port      coreV1.ContainerPort        `json:"port,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=port"`
 	Resources coreV1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
 	Affinity  *coreV1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
-	Probe     Probe                       `json:"probe,omitempty" protobuf:"bytes,18,rep,name=probe"`
+	Probe     Probe                       `json:"probe,omitempty" protobuf:"bytes,18,opt,name=probe"`
 }
 type Probe struct {
-	Path string `json:"path,omitempty" protobuf:"bytes,11,rep,name=path"`
+	Path string `json:"path,omitempty" protobuf:"bytes,11,opt,name=path"`
 	Port int32  `json:"port,omitempty" protobuf:"varint,2,opt,name=port"`
 }
 
