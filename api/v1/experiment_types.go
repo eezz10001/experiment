@@ -44,7 +44,7 @@ type ExperimentSpec struct {
 	Port      coreV1.ContainerPort        `json:"ports,omitempty" patchStrategy:"merge" patchMergeKey:"port" protobuf:"bytes,1,rep,name=ports"`
 	Resources coreV1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,8,opt,name=resources"`
 	Affinity  *coreV1.Affinity            `json:"affinity,omitempty" protobuf:"bytes,18,opt,name=affinity"`
-	Probe     Probe                       `json:"host,omitempty" protobuf:"bytes,11,rep,name=host"`
+	Probe     Probe                       `json:"probe,omitempty" protobuf:"bytes,18,rep,name=probe"`
 }
 type Probe struct {
 	Path string `json:"path,omitempty" protobuf:"bytes,11,rep,name=path"`
