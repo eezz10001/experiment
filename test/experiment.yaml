@@ -4,13 +4,30 @@ metadata:
   name: myapp
   namespace: test
 spec:
-  image: nginx
+  image: test:v1
   host: test.com
-  port:
-    name: web
-    hostPort: 80
+  ports:
     containerPort: 80
-  probe:
-    path: /
-    port: 80
+    name: myweb
+    hostPort: 80
+    protocol: TCP|UDP|SCTP
+    hostIP: ffsf
+  resources:
+    limits:
+      cpu: 300m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - worker2
+  Probe:
+    path: /path
+    Port: 8080
 

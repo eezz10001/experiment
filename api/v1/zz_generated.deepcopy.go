@@ -22,7 +22,6 @@ limitations under the License.
 package v1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -90,11 +89,6 @@ func (in *ExperimentSpec) DeepCopyInto(out *ExperimentSpec) {
 	*out = *in
 	out.Port = in.Port
 	in.Resources.DeepCopyInto(&out.Resources)
-	if in.Affinity != nil {
-		in, out := &in.Affinity, &out.Affinity
-		*out = new(corev1.Affinity)
-		(*in).DeepCopyInto(*out)
-	}
 	out.Probe = in.Probe
 }
 
