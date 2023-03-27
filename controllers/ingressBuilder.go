@@ -78,7 +78,7 @@ func (this *ingressBuilder) Build(ctx context.Context) (status bool, err error) 
 		if err != nil {
 			return false, err
 		}
-
+		status = false
 		err = this.Create(ctx, this.ingress)
 		if err != nil {
 			return false, err

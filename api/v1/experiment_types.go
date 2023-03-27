@@ -55,7 +55,7 @@ type ExperimentStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	SubResourcesStatus SubResourcesStatus `json:"subResourcesStatus,omitempty"`
-	Phase              ExperimentPhase    `json:"phase,omitempty"`
+	Phase              ExperimentPhase    `json:"phase,omitempty,default=NoRunning"`
 	Message            string             `json:"message,omitempty"`
 }
 
@@ -67,6 +67,7 @@ type SubResourcesStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="STATUS",type="string",JSONPath=".status.phase"
 
 // Experiment is the Schema for the experiments API
 type Experiment struct {

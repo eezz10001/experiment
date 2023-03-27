@@ -82,25 +82,27 @@ func (this *statefulSetBuilder) setOwner() error {
 }
 
 func (this *statefulSetBuilder) Build(ctx context.Context) (status bool, err error) {
-	if this.statefulSet.CreationTimestamp.IsZero() { //is create
+
+	if this.statefulSet.CreationTimestamp.IsZero() {
 		err = this.apply().setOwner()
 		if err != nil {
 			return false, err
 		}
+		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas
 
 		err = this.Create(ctx, this.statefulSet)
 		if err != nil {
 			return
 		}
 
-	} else { //is patch
+	} else {
 		patch := client.MergeFrom(this.statefulSet.DeepCopy())
 		this.apply()
+		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas
 		err = this.Patch(ctx, this.statefulSet, patch)
 		if err != nil {
 			return
 		}
-		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas
 	}
 	return
 }

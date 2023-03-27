@@ -24,6 +24,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/client-go/util/workqueue"
 	log2 "log"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -68,7 +69,6 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{}, err
 	}
 
-	//is delete
 	if !experiment.DeletionTimestamp.IsZero() {
 		log2.Println("-------------------delete crd <" + experiment.Name + ">")
 		return ctrl.Result{}, nil
@@ -87,6 +87,7 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 }
 
 func (r *ExperimentReconciler) CreateComponent(experiment *experimentv1.Experiment) (stsStatus, svcStatus, ingressStatus bool, err error) {
+
 	//create statefulSet
 	stsStatus, err = r.CreateStatefulset(experiment)
 	if err != nil {
@@ -135,6 +136,8 @@ func (r *ExperimentReconciler) CreateIngress(experiment *experimentv1.Experiment
 }
 
 func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experiment, ctx context.Context) error {
+	b, _ := json.Marshal(experiment)
+	log2.Println(string(b))
 	if experiment.Status.SubResourcesStatus.Sts == true &&
 		experiment.Status.SubResourcesStatus.Svc == true &&
 		experiment.Status.SubResourcesStatus.Ingress == true {
@@ -143,10 +146,8 @@ func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experimen
 			return r.Client.Status().Update(ctx, experiment)
 		}
 	} else {
-		if experiment.Status.Phase == experimentv1.ImpalaPhaseRunning {
-			experiment.Status.Phase = experimentv1.ImpalaPhaseFail
-			return r.Client.Status().Update(ctx, experiment)
-		}
+		experiment.Status.Phase = experimentv1.ImpalaPhaseFail
+		return r.Client.Status().Update(ctx, experiment)
 	}
 	return nil
 }
@@ -154,6 +155,7 @@ func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experimen
 // Prevent manual misoperation
 
 func (r *ExperimentReconciler) OnObjUpdate(event event.UpdateEvent, rateLimitingInterface workqueue.RateLimitingInterface) {
+
 	if ok := checkIsExperimentResource(event.ObjectOld.GetLabels()); !ok {
 		return
 	}
@@ -166,6 +168,7 @@ func (r *ExperimentReconciler) OnObjUpdate(event event.UpdateEvent, rateLimiting
 }
 
 func (r *ExperimentReconciler) OnObjDelete(event event.DeleteEvent, rateLimitingInterface workqueue.RateLimitingInterface) {
+
 	if ok := checkIsExperimentResource(event.Object.GetLabels()); !ok {
 		return
 	}

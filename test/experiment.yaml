@@ -2,32 +2,25 @@ apiVersion: turing.touchturing.com/v1
 kind: Experiment
 metadata:
   name: myapp
+  labels:
+    experiment.touchturing.com/v1:  experiment
+    experiment.touchturing.com/instance: myapp
+    experiment.touchturing.com/ns: test
   namespace: test
 spec:
-  image: test:v1
+  image: nginx
   host: test.com
-  ports:
+  port:
     containerPort: 80
     name: myweb
     hostPort: 80
-    protocol: TCP|UDP|SCTP
-    hostIP: ffsf
   resources:
     limits:
       cpu: 300m
       memory: 500Mi
     requests:
       cpu: 100m
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                  - worker2
-  Probe:
-    path: /path
-    Port: 8080
+  probe:
+    path: /
+    port: 80
 
