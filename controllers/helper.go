@@ -35,9 +35,10 @@ func GetContainer(experiment *experimentv1.Experiment) []coreV1.Container {
 	container.Image = experiment.Spec.Image
 	container.Ports = []coreV1.ContainerPort{experiment.Spec.Port}
 	container.Resources = experiment.Spec.Resources
-
+	//帮我解释下面
 	container.ReadinessProbe = GetReadinessProbe(experiment)
 	container.LivenessProbe = GetLivenessProbe(experiment)
+	container.Command = experiment.Spec.Command
 	return []coreV1.Container{container}
 }
 

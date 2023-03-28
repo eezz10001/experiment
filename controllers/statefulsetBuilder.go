@@ -67,6 +67,7 @@ func (this *statefulSetBuilder) apply() *statefulSetBuilder {
 	this.experiment.ObjectMeta.Labels = GetLabel(this.experiment, this.experiment.ObjectMeta.Labels)
 
 	//.spec
+	this.statefulSet.Spec.UpdateStrategy.Type = appV1.RollingUpdateStatefulSetStrategyType
 	this.statefulSet.Spec.Selector = &metaV1.LabelSelector{MatchLabels: selectorLabel}
 	this.statefulSet.Spec.Template.ObjectMeta.Labels = selectorLabel
 	this.statefulSet.Spec.ServiceName = this.statefulSet.Name

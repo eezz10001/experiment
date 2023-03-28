@@ -39,6 +39,10 @@ spec:
           spec:
             description: ExperimentSpec defines the desired state of Experiment
             properties:
+              command:
+                items:
+                  type: string
+                type: array
               host:
                 type: string
               image:

@@ -9,18 +9,21 @@ metadata:
   namespace: test
 spec:
   image: nginx
-  host: test.com
+  host: touchturing.com
   port:
     containerPort: 80
-    name: myweb
+    name: nginx
     hostPort: 80
   resources:
     limits:
       cpu: 300m
       memory: 500Mi
+      nvidia.com/gpu: 1
     requests:
       cpu: 100m
+      nvidia.com/gpu: 1
   probe:
     path: /
     port: 80
+  command: [ "/bin/sh", "-c", "while true; do echo 'Hello, World!'; sleep 1; done" ]
 
