@@ -57,12 +57,9 @@ func NewIngressBuilder(client client.Client, experiment *experimentv1.Experiment
 	return &ingressBuilder{Client: client, experiment: experiment, ingress: ingress, Scheme: scheme, host: host}, nil
 }
 
-// 同步属性
 func (this *ingressBuilder) apply() *ingressBuilder {
-
 	this.ingress.ObjectMeta.Name = this.experiment.Name
 	this.ingress.ObjectMeta.Namespace = this.experiment.Namespace
-
 	this.ingress.Labels = GetLabel(this.experiment, this.ingress.Labels)
 	this.ingress.Spec.Rules = GetIngressRule(this.experiment)
 	return this

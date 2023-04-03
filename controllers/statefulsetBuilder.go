@@ -5,6 +5,7 @@ import (
 	"context"
 	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
+	coreV1 "k8s.io/api/core/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
@@ -67,7 +68,7 @@ func (this *statefulSetBuilder) apply() *statefulSetBuilder {
 	this.experiment.ObjectMeta.Labels = GetLabel(this.experiment, this.experiment.ObjectMeta.Labels)
 
 	//.spec
-	this.statefulSet.Spec.UpdateStrategy.Type = appV1.RollingUpdateStatefulSetStrategyType
+	this.statefulSet.Spec.PodManagementPolicy = appV1.ParallelPodManagement
 	this.statefulSet.Spec.Selector = &metaV1.LabelSelector{MatchLabels: selectorLabel}
 	this.statefulSet.Spec.Template.ObjectMeta.Labels = selectorLabel
 	this.statefulSet.Spec.ServiceName = this.statefulSet.Name
@@ -89,8 +90,7 @@ func (this *statefulSetBuilder) Build(ctx context.Context) (status bool, err err
 		if err != nil {
 			return false, err
 		}
-		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas
-
+		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas && this.statefulSet.Status.ReadyReplicas != 0 && GetPodPhase(this.Client, this.experiment) == coreV1.PodRunning
 		err = this.Create(ctx, this.statefulSet)
 		if err != nil {
 			return
@@ -99,7 +99,7 @@ func (this *statefulSetBuilder) Build(ctx context.Context) (status bool, err err
 	} else {
 		patch := client.MergeFrom(this.statefulSet.DeepCopy())
 		this.apply()
-		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas
+		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas && this.statefulSet.Status.ReadyReplicas != 0 && GetPodPhase(this.Client, this.experiment) == coreV1.PodRunning
 		err = this.Patch(ctx, this.statefulSet, patch)
 		if err != nil {
 			return

@@ -1,29 +1,28 @@
 apiVersion: turing.touchturing.com/v1
 kind: Experiment
 metadata:
-  name: myapp
+  name: experiment-course-x-user-student-y
   labels:
     experiment.touchturing.com/v1:  experiment
-    experiment.touchturing.com/instance: myapp
-    experiment.touchturing.com/ns: test
-  namespace: test
+    experiment.touchturing.com/instance: experiment-course-x-user-student-y
+    experiment.touchturing.com/ns: default
+  namespace: default
 spec:
-  image: nginx
+  command: [ "/bin/sh", "-c", "/opt/conda/bin/jupyter notebook  --notebook-dir=/opt/notebooks  --no-browser --allow-root  " ]
+  image: registry.cn-beijing.aliyuncs.com/explore-turing/pix2pixhd_master_jupyter:v0.1
   host: touchturing.com
   port:
-    containerPort: 80
-    name: nginx
-    hostPort: 80
+    containerPort: 8888
+    name: experiment
   resources:
     limits:
-      cpu: 300m
+      cpu: 1024m
       memory: 500Mi
       nvidia.com/gpu: 1
     requests:
-      cpu: 100m
-      nvidia.com/gpu: 1
+      cpu: 1024m
+      nvidia.com/gpu:  1
   probe:
-    path: /
-    port: 80
-  command: [ "/bin/sh", "-c", "while true; do echo 'Hello, World!'; sleep 1; done" ]
+    port: 8888
+#  command: [ "/bin/sh", "-c", "while true; do echo 'Hello, World!'; sleep 1; done" ]
 

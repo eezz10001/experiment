@@ -18,6 +18,8 @@ package controllers
 
 import (
 	"context"
+	"fmt"
+	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
@@ -33,8 +35,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
-
-	experimentv1 "github.com/eezz10001/experiment/api/v1"
 )
 
 // ExperimentReconciler reconciles a Experiment object
@@ -58,6 +58,7 @@ type ExperimentReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.13.1/pkg/reconcile
 func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ret ctrl.Result, err error) {
 	_ = log.FromContext(ctx)
+	fmt.Println("进入判断状态1")
 
 	experiment := &experimentv1.Experiment{}
 
@@ -79,6 +80,7 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	}
 
 	if err := r.JudgmentStatus(experiment, ctx); err != nil {
+
 		log2.Println("==============Judgment status fail")
 		return ctrl.Result{}, err
 	}
@@ -86,7 +88,6 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 }
 
 func (r *ExperimentReconciler) CreateComponent(experiment *experimentv1.Experiment) (stsStatus, svcStatus, ingressStatus bool, err error) {
-
 	//create statefulSet
 	stsStatus, err = r.CreateStatefulset(experiment)
 	if err != nil {
@@ -135,6 +136,7 @@ func (r *ExperimentReconciler) CreateIngress(experiment *experimentv1.Experiment
 }
 
 func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experiment, ctx context.Context) error {
+	fmt.Println("进入判断状态2")
 	//b, _ := json.Marshal(experiment)
 	//log2.Println(string(b))
 	if experiment.Status.SubResourcesStatus.Sts == true &&

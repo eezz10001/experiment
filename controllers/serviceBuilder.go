@@ -73,7 +73,7 @@ func (this *serviceBuilder) setOwner() error {
 }
 
 func (this *serviceBuilder) Build(ctx context.Context) (status bool, err error) {
-	if this.service.CreationTimestamp.IsZero() { //is create
+	if this.service.CreationTimestamp.IsZero() {
 		err = this.apply().setOwner()
 		if err != nil {
 			return false, err
@@ -83,7 +83,7 @@ func (this *serviceBuilder) Build(ctx context.Context) (status bool, err error) 
 		if err != nil {
 			return false, err
 		}
-	} else { //is patch
+	} else {
 		patch := client.MergeFrom(this.service.DeepCopy())
 		this.apply()
 		err = this.Patch(ctx, this.service, patch)
