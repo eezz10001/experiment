@@ -62,7 +62,7 @@ test: manifests generate fmt vet envtest ## Run tests.
 
 .PHONY: build
 build: manifests generate fmt vet ## Build manager binary.
-	 CGO_ENABLED=0  GOOS=linux  GOARCH=arm64  go build -o c cmd/core/main.go
+	 go build -o c cmd/core/main.go
 
 
 .PHONY: run
