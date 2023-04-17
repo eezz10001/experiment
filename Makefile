@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator:arm64-v1
+IMG ?= registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator:arm64-v2
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.25.0
 
