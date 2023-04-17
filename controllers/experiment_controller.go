@@ -136,7 +136,7 @@ func (r *ExperimentReconciler) CreateIngress(experiment *experimentv1.Experiment
 }
 
 func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experiment, ctx context.Context) error {
-	fmt.Println("进入判断状态2")
+
 	//b, _ := json.Marshal(experiment)
 	//log2.Println(string(b))
 	if experiment.Status.SubResourcesStatus.Sts == true &&

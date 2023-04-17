@@ -96,7 +96,7 @@ func GetIngressRule(experiment *experimentv1.Experiment) []v1beta1.IngressRule {
 	PathType := v1beta1.PathTypePrefix
 	ret := make([]v1beta1.IngressRule, 0)
 	ret = append(ret, v1beta1.IngressRule{
-		Host: fmt.Sprintf("%s.%s", experiment.Name, experiment.Spec.Host),
+		Host: experiment.Spec.Host,
 		IngressRuleValue: v1beta1.IngressRuleValue{
 			HTTP: &v1beta1.HTTPIngressRuleValue{
 				Paths: []v1beta1.HTTPIngressPath{{

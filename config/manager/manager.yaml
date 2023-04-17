@@ -67,10 +67,10 @@ spec:
         #   type: RuntimeDefault
       containers:
       - command:
-        - /manager
+        - /c
         args:
         - --leader-elect
-        image: controller:latest
+        image: registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator:arm64-v1
         name: manager
         securityContext:
           allowPrivilegeEscalation: false

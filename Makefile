@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator:arm64-v1
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.25.0
 
@@ -60,10 +60,13 @@ test: manifests generate fmt vet envtest ## Run tests.
 
 ##@ Build
 
-.PHONY: build
+.PHONY: build-arm64
 build: manifests generate fmt vet ## Build manager binary.
-	go build -o bin/manager main.go
+	 CGO_ENABLED=0  GOOS=linux  GOARCH=arm64  go build -o c cmd/core/main.go
 
+.PHONY: build-amd64
+build: manifests generate fmt vet ## Build manager binary.
+	 CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -o c cmd/core/main.go
 .PHONY: run
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./cmd/core/main.go

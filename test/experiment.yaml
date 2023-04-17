@@ -24,5 +24,6 @@ spec:
       nvidia.com/gpu:  1
   probe:
     port: 8888
+
 #  command: [ "/bin/sh", "-c", "while true; do echo 'Hello, World!'; sleep 1; done" ]
 
