@@ -60,13 +60,11 @@ test: manifests generate fmt vet envtest ## Run tests.
 
 ##@ Build
 
-.PHONY: build-arm64
+.PHONY: build
 build: manifests generate fmt vet ## Build manager binary.
 	 CGO_ENABLED=0  GOOS=linux  GOARCH=arm64  go build -o c cmd/core/main.go
 
-.PHONY: build-amd64
-build: manifests generate fmt vet ## Build manager binary.
-	 CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -o c cmd/core/main.go
+
 .PHONY: run
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./cmd/core/main.go
