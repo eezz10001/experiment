@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator
-  newTag: arm64-v1
+  newTag: arm64-v2

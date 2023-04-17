@@ -36,18 +36,11 @@ spec:
       labels:
         control-plane: controller-manager
     spec:
-      securityContext:
-        runAsNonRoot: true
       containers:
       - command:
         - /c
-        image: registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator:arm64-v1
+        image: new:v2
         name: manager
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - "ALL"
         livenessProbe:
           httpGet:
             path: /healthz

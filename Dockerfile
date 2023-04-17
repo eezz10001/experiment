@@ -1,4 +1,4 @@
-FROM  alpine:3.12.0
+FROM  centos:7
 WORKDIR /
 USER 65532:65532
 
