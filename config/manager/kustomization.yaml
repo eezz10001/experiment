@@ -4,5 +4,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: controller
-  newName: registry.cn-beijing.aliyuncs.com/explore-turing/turing-operator
-  newTag: arm64-v2
+  newName: new
+  newTag: v2
