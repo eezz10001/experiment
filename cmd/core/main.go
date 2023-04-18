@@ -79,7 +79,6 @@ func run() {
 		LeaderElectionID:       "a5625552.touchturing.com",
 	})
 
-	mgr.GetClient()
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)

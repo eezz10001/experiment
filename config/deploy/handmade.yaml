@@ -7,7 +7,18 @@ spec:
   containers:
     - name: experiment-controller-manager
       image: new:v2
+      volumeMounts:
+        - name: kubeconfig
+          mountPath: /config
+          subPath: config
       env:
         - name: KUBECONFIG
-          value: "/root/.kube/config"
+          value: "/config"
       command: ["/c"]
+  volumes:
+    - name: kubeconfig
+      configMap:
+        name: kubeconfig
+        items:
+          - key: config
+            path: config
