@@ -3,12 +3,14 @@ package controllers
 import (
 	"bytes"
 	"context"
+	"fmt"
 	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -98,7 +100,9 @@ func (this *statefulSetBuilder) Build(ctx context.Context) (status bool, err err
 	} else {
 		patch := client.MergeFrom(this.statefulSet.DeepCopy())
 		this.apply()
-
+		b, _ := json.Marshal(this.statefulSet)
+		fmt.Println(string(b))
+		fmt.Println(this.statefulSet.Status.Replicas, this.statefulSet.Status.ReadyReplicas)
 		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas && this.statefulSet.Status.ReadyReplicas != 0 && GetPodPhase(this.Client, this.experiment) == coreV1.PodRunning
 		err = this.Patch(ctx, this.statefulSet, patch)
 		if err != nil {
