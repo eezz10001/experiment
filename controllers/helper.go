@@ -125,6 +125,7 @@ func checkIsExperimentResource(label map[string]string) bool {
 	if ok && v == LabelConstantValue {
 		return true
 	}
+
 	return false
 }
 

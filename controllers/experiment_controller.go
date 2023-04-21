@@ -23,6 +23,7 @@ import (
 	coreV1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/workqueue"
@@ -32,6 +33,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 )
@@ -156,11 +158,11 @@ func (r *ExperimentReconciler) OnObjUpdate(event event.UpdateEvent, rateLimiting
 	rateLimitingInterface.Add(reconcile.Request{
 		NamespacedName: types.NamespacedName{Name: event.ObjectOld.GetName(),
 			Namespace: event.ObjectOld.GetNamespace()}})
-
 	return
 }
 
 func (r *ExperimentReconciler) OnObjDelete(event event.DeleteEvent, rateLimitingInterface workqueue.RateLimitingInterface) {
+
 	if ok := checkIsExperimentResource(event.Object.GetLabels()); !ok {
 		return
 	}
@@ -173,7 +175,20 @@ func (r *ExperimentReconciler) OnObjDelete(event event.DeleteEvent, rateLimiting
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *ExperimentReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	p, _ := predicate.LabelSelectorPredicate(
+		metaV1.LabelSelector{
+			MatchExpressions: []metaV1.LabelSelectorRequirement{
+				{
+					Key:      LabelConstantKey,
+					Operator: metaV1.LabelSelectorOpExists,
+					Values: []string{
+						LabelConstantValue,
+					},
+				},
+			},
+		})
 	return ctrl.NewControllerManagedBy(mgr).
+		WithEventFilter(p).
 		For(&experimentv1.Experiment{}).
 		Watches(&source.Kind{Type: &appV1.StatefulSet{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
 		Watches(&source.Kind{Type: &coreV1.Service{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
