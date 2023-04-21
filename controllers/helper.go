@@ -132,7 +132,8 @@ func GetPodPhase(c client.Client, experiment *experimentv1.Experiment) (status c
 	pod := &coreV1.Pod{}
 	err := c.Get(context.TODO(), client.ObjectKey{
 		Namespace: experiment.Namespace,
-		Name:      fmt.Sprintf("%s-0", experiment.Name),
+		Name: fmt.Sprintf(
+			"%s-0", experiment.Name),
 	}, pod)
 
 	if err != nil {

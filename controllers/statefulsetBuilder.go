@@ -90,20 +90,20 @@ func (this *statefulSetBuilder) Build(ctx context.Context) (status bool, err err
 		if err != nil {
 			return false, err
 		}
-		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas && this.statefulSet.Status.ReadyReplicas != 0 && GetPodPhase(this.Client, this.experiment) == coreV1.PodRunning
+		status = false
 		err = this.Create(ctx, this.statefulSet)
 		if err != nil {
-			return
+			return false, err
 		}
-
 	} else {
 		patch := client.MergeFrom(this.statefulSet.DeepCopy())
 		this.apply()
+
 		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas && this.statefulSet.Status.ReadyReplicas != 0 && GetPodPhase(this.Client, this.experiment) == coreV1.PodRunning
 		err = this.Patch(ctx, this.statefulSet, patch)
 		if err != nil {
-			return
+			return false, err
 		}
 	}
-	return
+	return status, nil
 }

@@ -58,8 +58,8 @@ type ExperimentReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.13.1/pkg/reconcile
 func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ret ctrl.Result, err error) {
 	_ = log.FromContext(ctx)
-	fmt.Println("进入判断状态1")
 
+	fmt.Println("Reconcile1111111111111")
 	experiment := &experimentv1.Experiment{}
 
 	if err := r.Get(ctx, req.NamespacedName, experiment); err != nil {
@@ -137,8 +137,6 @@ func (r *ExperimentReconciler) CreateIngress(experiment *experimentv1.Experiment
 
 func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experiment, ctx context.Context) error {
 
-	//b, _ := json.Marshal(experiment)
-	//log2.Println(string(b))
 	if experiment.Status.SubResourcesStatus.Sts == true &&
 		experiment.Status.SubResourcesStatus.Svc == true &&
 		experiment.Status.SubResourcesStatus.Ingress == true {
