@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
@@ -152,10 +153,12 @@ func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experimen
 // Prevent manual misoperation
 
 func (r *ExperimentReconciler) OnObjUpdate(event event.UpdateEvent, rateLimitingInterface workqueue.RateLimitingInterface) {
+	fmt.Println("update event1", event.ObjectOld.GetName(), event.ObjectOld.GetNamespace())
 
 	if ok := checkIsExperimentResource(event.ObjectOld.GetLabels()); !ok {
 		return
 	}
+	fmt.Println("update event2", event.ObjectOld.GetName(), event.ObjectOld.GetNamespace())
 
 	rateLimitingInterface.Add(reconcile.Request{
 		NamespacedName: types.NamespacedName{Name: event.ObjectOld.GetName(),
