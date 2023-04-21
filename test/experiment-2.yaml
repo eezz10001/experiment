@@ -1,12 +1,12 @@
 apiVersion: turing.touchturing.com/v1
 kind: Experiment
 metadata:
-  name: experiment-course-x-user-student-y
+  name: experiment-course-x-user-student-2
   namespace: default
 spec:
   command: [ "/bin/sh", "-c", "/usr/bin/python3.7 /usr/local/bin/jupyter-notebook --notebook-dir=/data/experiments/ --no-browser --allow-root --ip=0.0.0.0" ]
   image: registry.cn-beijing.aliyuncs.com/explore-turing/base:v3
-  host: experiment-course-x-user-student-y.touchturing.com
+  host: experiment-course-x-user-student-2.touchturing.com
   port:
     containerPort: 8888
     name: experiment

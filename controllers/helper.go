@@ -21,7 +21,6 @@ func GetLabel(experiment *experimentv1.Experiment, labels map[string]string) map
 	if labels == nil {
 		labels = map[string]string{}
 	}
-
 	labels[LabelConstantKey] = LabelConstantValue
 	labels[LabelNsKey] = experiment.Namespace
 	labels[LabelInstanceKey] = experiment.Name
@@ -121,6 +120,7 @@ func checkIsExperimentResource(label map[string]string) bool {
 	if label == nil {
 		return false
 	}
+
 	v, ok := label[LabelConstantKey]
 	if ok && v == LabelConstantValue {
 		return true

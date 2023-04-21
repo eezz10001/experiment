@@ -10,7 +10,6 @@ import (
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -68,7 +67,11 @@ func (this *statefulSetBuilder) apply() *statefulSetBuilder {
 	this.statefulSet.ObjectMeta.Namespace = this.experiment.Namespace
 
 	selectorLabel := GetLabel(this.experiment, nil)
-	this.experiment.ObjectMeta.Labels = GetLabel(this.experiment, this.experiment.ObjectMeta.Labels)
+	this.experiment.ObjectMeta.Labels = map[string]string{
+		LabelConstantKey: LabelConstantValue,
+		LabelInstanceKey: this.experiment.Name,
+		LabelNsKey:       this.experiment.Namespace,
+	}
 
 	//.spec
 	this.statefulSet.Spec.PodManagementPolicy = appV1.ParallelPodManagement
@@ -101,8 +104,6 @@ func (this *statefulSetBuilder) Build(ctx context.Context) (status bool, err err
 	} else {
 		patch := client.MergeFrom(this.statefulSet.DeepCopy())
 		this.apply()
-		b, _ := json.Marshal(this.statefulSet)
-		fmt.Println(string(b))
 		fmt.Println(this.statefulSet.Status.Replicas, this.statefulSet.Status.ReadyReplicas)
 		status = this.statefulSet.Status.Replicas == this.statefulSet.Status.ReadyReplicas && this.statefulSet.Status.ReadyReplicas != 0 && GetPodPhase(this.Client, this.experiment) == coreV1.PodRunning
 		err = this.Patch(ctx, this.statefulSet, patch)
