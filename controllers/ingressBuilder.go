@@ -21,7 +21,7 @@ metadata:
   namespace: {{ .Namespace}}
 `
 
-type ingressBuilder struct {
+type IngressBuilder struct {
 	client.Client
 	experiment *experimentv1.Experiment
 	ingress    *v1beta1.Ingress
@@ -29,7 +29,7 @@ type ingressBuilder struct {
 	host       string
 }
 
-func NewIngressBuilder(client client.Client, experiment *experimentv1.Experiment, scheme *runtime.Scheme, host string) (*ingressBuilder, error) {
+func NewIngressBuilder(client client.Client, experiment *experimentv1.Experiment, scheme *runtime.Scheme, host string) (*IngressBuilder, error) {
 	ingress := &v1beta1.Ingress{}
 
 	err := client.Get(context.Background(), types.NamespacedName{
@@ -54,10 +54,10 @@ func NewIngressBuilder(client client.Client, experiment *experimentv1.Experiment
 		}
 	}
 
-	return &ingressBuilder{Client: client, experiment: experiment, ingress: ingress, Scheme: scheme, host: host}, nil
+	return &IngressBuilder{Client: client, experiment: experiment, ingress: ingress, Scheme: scheme, host: host}, nil
 }
 
-func (this *ingressBuilder) apply() *ingressBuilder {
+func (this *IngressBuilder) apply() *IngressBuilder {
 	this.ingress.ObjectMeta.Name = this.experiment.Name
 	this.ingress.ObjectMeta.Namespace = this.experiment.Namespace
 	this.ingress.Labels = GetLabel(this.experiment, this.ingress.Labels)
@@ -65,12 +65,12 @@ func (this *ingressBuilder) apply() *ingressBuilder {
 	return this
 }
 
-func (this *ingressBuilder) setOwner() error {
+func (this *IngressBuilder) setOwner() error {
 	return controllerutil.SetControllerReference(this.experiment, this.ingress, this.Scheme)
 }
 
-func (this *ingressBuilder) Build(ctx context.Context) (status bool, err error) {
-	if this.ingress.CreationTimestamp.IsZero() { //is create
+func (this *IngressBuilder) Build(ctx context.Context) (status bool, err error) {
+	if this.ingress.CreationTimestamp.IsZero() {
 		err = this.apply().setOwner()
 		if err != nil {
 			return false, err
@@ -80,7 +80,7 @@ func (this *ingressBuilder) Build(ctx context.Context) (status bool, err error) 
 		if err != nil {
 			return false, err
 		}
-	} else { //is patch
+	} else {
 		patch := client.MergeFrom(this.ingress.DeepCopy())
 
 		this.apply()
