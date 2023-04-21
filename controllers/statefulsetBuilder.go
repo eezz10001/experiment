@@ -34,6 +34,7 @@ type statefulSetBuilder struct {
 
 func NewStatefulSetBuilder(client client.Client, experiment *experimentv1.Experiment, scheme *runtime.Scheme) (*statefulSetBuilder, error) {
 	statefulSet := &appV1.StatefulSet{}
+
 	err := client.Get(context.Background(), types.NamespacedName{
 		Namespace: experiment.Namespace, Name: experiment.Name,
 	}, statefulSet)

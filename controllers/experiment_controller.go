@@ -18,7 +18,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
@@ -59,7 +58,6 @@ type ExperimentReconciler struct {
 func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ret ctrl.Result, err error) {
 	_ = log.FromContext(ctx)
 
-	fmt.Println("Reconcile1111111111111")
 	experiment := &experimentv1.Experiment{}
 
 	if err := r.Get(ctx, req.NamespacedName, experiment); err != nil {
