@@ -14,9 +14,11 @@ spec:
     limits:
       cpu: 1024m
       memory: 500Mi
+      disk: 10Gi
       huawei.com/Ascend910-8c: 1
     requests:
       cpu: 1024m
+      memory: 500Mi
       huawei.com/Ascend910-8c: 1
   probe:
     port: 8888
