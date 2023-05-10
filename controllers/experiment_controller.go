@@ -61,7 +61,7 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	_ = log.FromContext(ctx)
 
 	experiment := &experimentv1.Experiment{}
-
+	go ObjPublish(experiment)
 	if err := r.Get(ctx, req.NamespacedName, experiment); err != nil {
 		if errors.IsNotFound(err) {
 			return ctrl.Result{}, nil

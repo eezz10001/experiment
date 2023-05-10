@@ -1,0 +1,4 @@
+{"lv":"error","ts":1683685176,"msg":"redis init fail","error":"dial tcp: address 60.205.125.113: missing port in address"}
+{"lv":"error","ts":1683685405,"msg":"redis init fail","error":"ERR invalid password"}
+{"lv":"info","ts":1683685460,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1683685475,"msg":"redis init success","value":"PONG"}
