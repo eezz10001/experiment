@@ -61,7 +61,7 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	_ = log.FromContext(ctx)
 
 	experiment := &experimentv1.Experiment{}
-	go ObjPublish(experiment)
+
 	if err := r.Get(ctx, req.NamespacedName, experiment); err != nil {
 		if errors.IsNotFound(err) {
 			return ctrl.Result{}, nil
@@ -74,6 +74,7 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{}, nil
 	}
 
+	go ObjPublish(experiment)
 	if experiment.Status.SubResourcesStatus.Sts, experiment.Status.SubResourcesStatus.Svc,
 		experiment.Status.SubResourcesStatus.Ingress, err = r.CreateComponent(experiment); err != nil {
 		return ctrl.Result{}, err
