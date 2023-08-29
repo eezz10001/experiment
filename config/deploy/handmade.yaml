@@ -14,6 +14,10 @@ spec:
       env:
         - name: KUBECONFIG
           value: "/config"
+        - name: REDIS_ADDR
+          value: "redis://redis-master:6379"
+        - name: REDIS_PASSWORD
+          value: "123456"
       command: ["/c"]
   volumes:
     - name: kubeconfig

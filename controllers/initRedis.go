@@ -13,7 +13,7 @@ var Redis = new(redis.Client)
 
 func InitRedis() {
 	Redis = redis.NewClient(&redis.Options{
-		Addr:     "60.205.125.113:6379",
+		Addr:     "116.62.161.248:6379",
 		Password: "1234567aB", // no password set
 		DB:       1,           // use default DB
 	})
@@ -30,6 +30,7 @@ func ObjPublish(obj *experimentv1.Experiment) {
 
 	if obj.Status.Phase == "Running" {
 		b, err := json.Marshal(obj)
+		fmt.Println("publish obj", string(b))
 		if err != nil {
 			fmt.Println(err)
 		}
