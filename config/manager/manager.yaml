@@ -39,7 +39,7 @@ spec:
       containers:
       - command:
         - /c
-        image: new:v2
+        image: boxpw.tencentcloudcr.com/boxpw/new:v2
         name: manager
         livenessProbe:
           httpGet:

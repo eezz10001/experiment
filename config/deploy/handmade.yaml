@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: experiment-controller-manager
-      image: new:v2
+      image: boxpw.tencentcloudcr.com/boxpw/new:v2
       volumeMounts:
         - name: kubeconfig
           mountPath: /config
