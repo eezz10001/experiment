@@ -89,8 +89,10 @@ func (this *IngressBuilder) Build(ctx context.Context) (status bool, err error) 
 			return false, err
 		}
 	}
-	if this.ingress.Status.LoadBalancer.Ingress[0].IP != "" {
-		return true, nil
+	if len(this.ingress.Status.LoadBalancer.Ingress) > 0 {
+		if this.ingress.Status.LoadBalancer.Ingress[0].IP != "" {
+			return true, nil
+		}
 	}
 	return false, err
 }
