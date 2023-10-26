@@ -39,7 +39,7 @@ spec:
       containers:
       - command:
         - /c
-        image: boxpw.tencentcloudcr.com/boxpw/new:v2
+        image: harbor.internal.cn:8443/internal/experiment-turing/new:v1
         name: manager
         livenessProbe:
           httpGet:
