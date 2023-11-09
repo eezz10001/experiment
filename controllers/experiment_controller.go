@@ -210,7 +210,7 @@ func (r *ExperimentReconciler) ObjPublish(obj *experimentv1.Experiment) {
 	}
 
 	if len(service.Spec.Ports) > 0 {
-		obj.Spec.Host = fmt.Sprintf("http://%v:%v", os.Getenv("nodeip"), service.Spec.Ports[0].NodePort)
+		obj.Spec.Host = fmt.Sprintf("http://%v:%v", os.Getenv("NODE_IP"), service.Spec.Ports[0].NodePort)
 	}
 	if obj.Status.Phase == "Running" {
 		b, err := json.Marshal(obj)
