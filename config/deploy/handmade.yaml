@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: experiment-controller-manager
-      image: harbor.internal.cn:8443/internal/experiment-turing/new:v1
+      image: harbor.internal.cn:8443/internal/experiment-turing/new:v2
       volumeMounts:
         - name: kubeconfig
           mountPath: /config

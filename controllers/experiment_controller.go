@@ -18,6 +18,8 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
@@ -195,4 +197,29 @@ func (r *ExperimentReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Watches(&source.Kind{Type: &coreV1.Service{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
 		Watches(&source.Kind{Type: &v1beta1.Ingress{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
 		Complete(r)
+}
+
+func (r *ExperimentReconciler) ObjPublish(obj *experimentv1.Experiment) {
+	service := &coreV1.Service{}
+
+	err := r.Client.Get(context.Background(), types.NamespacedName{
+		Namespace: obj.Namespace, Name: obj.Name}, service)
+	if err != nil {
+		return
+	}
+	if len(service.Spec.Ports) > 0 {
+		obj.Spec.Host = fmt.Sprintf("http://%v:%v", service.Spec.Ports[0].NodePort)
+	}
+	if obj.Status.Phase == "Running" {
+		b, err := json.Marshal(obj)
+		fmt.Println("publish obj", string(b))
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(string(b))
+		err = Redis.Publish(context.Background(), "experiment", string(b)).Err()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }

@@ -39,7 +39,7 @@ spec:
       containers:
       - command:
         - /c
-        image: harbor.internal.cn:8443/internal/experiment-turing/new:v1
+        image: harbor.internal.cn:8443/internal/experiment-turing/new:v2
         name: manager
         livenessProbe:
           httpGet:
