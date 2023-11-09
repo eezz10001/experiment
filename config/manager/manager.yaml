@@ -41,6 +41,9 @@ spec:
         - /c
         image: harbor.internal.cn:8443/internal/experiment-turing/new:v2
         name: manager
+        env:
+          - name: NODE_IP
+            value: 192.3.21.45
         livenessProbe:
           httpGet:
             path: /healthz
