@@ -76,7 +76,7 @@ func (r *ExperimentReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 		return ctrl.Result{}, nil
 	}
 
-	go ObjPublish(experiment)
+	go r.ObjPublish(experiment)
 	if experiment.Status.SubResourcesStatus.Sts, experiment.Status.SubResourcesStatus.Svc,
 		experiment.Status.SubResourcesStatus.Ingress, err = r.CreateComponent(experiment); err != nil {
 		return ctrl.Result{}, err
