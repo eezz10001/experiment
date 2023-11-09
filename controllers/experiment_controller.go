@@ -30,6 +30,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/workqueue"
 	log2 "log"
+	"os"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/event"
@@ -207,8 +208,9 @@ func (r *ExperimentReconciler) ObjPublish(obj *experimentv1.Experiment) {
 	if err != nil {
 		return
 	}
+
 	if len(service.Spec.Ports) > 0 {
-		obj.Spec.Host = fmt.Sprintf("http://%v:%v", service.Spec.Ports[0].NodePort)
+		obj.Spec.Host = fmt.Sprintf("http://%v:%v", os.Getenv("nodeip"), service.Spec.Ports[0].NodePort)
 	}
 	if obj.Status.Phase == "Running" {
 		b, err := json.Marshal(obj)
