@@ -104,12 +104,6 @@ func (r *ExperimentReconciler) CreateComponent(experiment *experimentv1.Experime
 		return
 	}
 
-	//create  ingress
-	ingressStatus, err = r.CreateIngress(experiment)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -131,19 +125,10 @@ func (r *ExperimentReconciler) CreateService(experiment *experimentv1.Experiment
 	return status, err
 }
 
-func (r *ExperimentReconciler) CreateIngress(experiment *experimentv1.Experiment) (bool, error) {
-	ingressBuilder, err := NewIngressBuilder(r.Client, experiment, r.Scheme, experiment.Spec.Host)
-	if err != nil {
-		return false, err
-	}
-	return ingressBuilder.Build(context.Background())
-}
-
 func (r *ExperimentReconciler) JudgmentStatus(experiment *experimentv1.Experiment, ctx context.Context) error {
 
 	if experiment.Status.SubResourcesStatus.Sts == true &&
-		experiment.Status.SubResourcesStatus.Svc == true &&
-		experiment.Status.SubResourcesStatus.Ingress == true {
+		experiment.Status.SubResourcesStatus.Svc == true {
 		if experiment.Status.Phase != experimentv1.ImpalaPhaseRunning {
 			experiment.Status.Phase = experimentv1.ImpalaPhaseRunning
 			return r.Client.Status().Update(ctx, experiment)
@@ -210,7 +195,7 @@ func (r *ExperimentReconciler) ObjPublish(obj *experimentv1.Experiment) {
 	}
 
 	if len(service.Spec.Ports) > 0 {
-		obj.Spec.Host = fmt.Sprintf("http://%v:%v", os.Getenv("NODE_IP"), service.Spec.Ports[0].NodePort)
+		obj.Spec.Host = fmt.Sprintf("%v:%v", os.Getenv("NODE_IP"), service.Spec.Ports[0].NodePort)
 	}
 	if obj.Status.Phase == "Running" {
 		b, err := json.Marshal(obj)
@@ -218,10 +203,15 @@ func (r *ExperimentReconciler) ObjPublish(obj *experimentv1.Experiment) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		err = r.Client.Update(context.Background(), obj)
 		//fmt.Println(string(b))
+		if err != nil {
+			return
+		}
 		err = Redis.Publish(context.Background(), "experiment", string(b)).Err()
 		if err != nil {
 			fmt.Println(err)
 		}
+
 	}
 }

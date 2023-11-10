@@ -2,10 +2,7 @@ package controllers
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"github.com/eezz10001/ego/core/elog"
-	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -24,20 +21,4 @@ func InitRedis() {
 		return
 	}
 	elog.Info("redis init success", elog.FieldValue(pong))
-}
-
-func ObjPublish(obj *experimentv1.Experiment) {
-
-	if obj.Status.Phase == "Running" {
-		b, err := json.Marshal(obj)
-		fmt.Println("publish obj", string(b))
-		if err != nil {
-			fmt.Println(err)
-		}
-		err = Redis.Publish(context.Background(), "experiment", string(b)).Err()
-		if err != nil {
-			fmt.Println(err)
-		}
-
-	}
 }
