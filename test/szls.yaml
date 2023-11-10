@@ -14,7 +14,6 @@ spec:
     spec:
       nodeName: work-09
       containers:
-
         - name: szls
           image: 192.168.0.112:5008/jcyweb/vue-demo:v1.9.5
           command: ["nginx", "-g", "daemon off;"]
