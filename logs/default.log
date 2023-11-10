@@ -3,3 +3,10 @@
 {"lv":"info","ts":1683685460,"msg":"redis init success","value":"PONG"}
 {"lv":"info","ts":1683685475,"msg":"redis init success","value":"PONG"}
 {"lv":"info","ts":1683686816,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699591125,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699591181,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699593214,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699593236,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699593540,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699593674,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1699594519,"msg":"redis init success","value":"PONG"}

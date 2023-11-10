@@ -47,6 +47,7 @@ func GetContainer(experiment *experimentv1.Experiment) []coreV1.Container {
 
 func GetServicePorts(experiment *experimentv1.Experiment) coreV1.ServicePort {
 	return coreV1.ServicePort{
+		//NodePort: 31328,
 		Name:     experiment.Spec.Port.Name,
 		Protocol: experiment.Spec.Port.Protocol,
 		Port:     experiment.Spec.Port.ContainerPort,

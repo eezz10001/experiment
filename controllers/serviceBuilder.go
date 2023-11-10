@@ -84,12 +84,14 @@ func (this *serviceBuilder) Build(ctx context.Context) (status bool, err error) 
 			return false, err
 		}
 	} else {
-		patch := client.MergeFrom(this.service.DeepCopy())
-		this.apply()
-		err = this.Patch(ctx, this.service, patch)
-		if err != nil {
-			return false, err
-		}
+		//patch := client.MergeFrom(this.service.DeepCopy())
+		//
+		//fmt.Println(11111111)
+		//this.apply()
+		//err = this.Patch(ctx, this.service, patch)
+		//if err != nil {
+		//	return false, err
+		//}
 		status = this.service.Spec.ClusterIP != ""
 	}
 	return

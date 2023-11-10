@@ -218,7 +218,7 @@ func (r *ExperimentReconciler) ObjPublish(obj *experimentv1.Experiment) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(string(b))
+		//fmt.Println(string(b))
 		err = Redis.Publish(context.Background(), "experiment", string(b)).Err()
 		if err != nil {
 			fmt.Println(err)
