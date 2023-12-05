@@ -23,7 +23,6 @@ import (
 	experimentv1 "github.com/eezz10001/experiment/api/v1"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
-	"k8s.io/api/extensions/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -180,7 +179,7 @@ func (r *ExperimentReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&experimentv1.Experiment{}).
 		Watches(&source.Kind{Type: &appV1.StatefulSet{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
 		Watches(&source.Kind{Type: &coreV1.Service{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
-		Watches(&source.Kind{Type: &v1beta1.Ingress{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
+		//Watches(&source.Kind{Type: &v1beta1.Ingress{}}, handler.Funcs{UpdateFunc: r.OnObjUpdate, DeleteFunc: r.OnObjDelete}).
 		Complete(r)
 }
 

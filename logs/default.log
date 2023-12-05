@@ -17,3 +17,5 @@
 {"lv":"info","ts":1699600056,"msg":"redis init success","value":"PONG"}
 {"lv":"info","ts":1699600306,"msg":"redis init success","value":"PONG"}
 {"lv":"info","ts":1699601052,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1701785629,"msg":"redis init success","value":"PONG"}
+{"lv":"info","ts":1701785684,"msg":"redis init success","value":"PONG"}
