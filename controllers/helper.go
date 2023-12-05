@@ -11,6 +11,7 @@ import (
 )
 
 const (
+	Ns                 = "turing"
 	LabelConstantKey   = "experiment.touchturing.com/v1" //constant label
 	LabelConstantValue = "experiment"
 	LabelInstanceKey   = "experiment.touchturing.com/instance" // ins name
